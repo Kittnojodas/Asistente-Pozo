@@ -24,12 +24,19 @@ if (!IA_API_KEY || !IA_ASSISTANT_ID) {
   process.exit(1);
 }
 
-// Configuración para la API de IA
-const headers = {
-  "Authorization": `Bearer ${IA_API_KEY}`,
-  "OpenAI-Beta": "assistants=v2", // ¡Este header es crucial!
-  "Content-Type": "application/json"
-};
+// Función para obtener los headers de autenticación
+function getHeaders() {
+  // Verificar que la API key no esté vacía
+  if (!IA_API_KEY || IA_API_KEY.trim() === "") {
+    throw new Error("La API key está vacía o no definida");
+  }
+  
+  return {
+    "Authorization": `Bearer ${IA_API_KEY.trim()}`,
+    "OpenAI-Beta": "assistants=v2",
+    "Content-Type": "application/json"
+  };
+}
 
 // Función con reintentos para manejar errores temporales
 async function fetchWithRetry(url, options, retries = 3) {
@@ -52,7 +59,7 @@ async function esperarSinRunActivo(threadId) {
     try {
       const check = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/runs`,
-        { headers }
+        { headers: getHeaders() }
       );
       activo = check.data.data.some(
         (r) => r.status === "in_progress" || r.status === "queued"
@@ -75,11 +82,20 @@ app.post("/chat", async (req, res) => {
     console.log("📨 Mensaje recibido:", message);
     console.log("🧵 Thread ID:", threadId);
     
+    // Verificar variables de entorno
+    if (!IA_API_KEY || !IA_ASSISTANT_ID) {
+      console.error("❌ Variables de entorno no configuradas");
+      return res.status(500).json({ 
+        error: "Configuración incompleta del servidor",
+        details: "Faltan IA_API_KEY o IA_ASSISTANT_ID"
+      });
+    }
+
     // Crear thread si no existe
     if (!threadId) {
       console.log("🆕 Creando nuevo thread");
       try {
-        const threadRes = await fetchWithRetry("https://api.openai.com/v1/threads", {}, { headers });
+        const threadRes = await fetchWithRetry("https://api.openai.com/v1/threads", {}, { headers: getHeaders() });
         threadId = threadRes.data.id;
         console.log("✅ Thread creado:", threadId);
       } catch (threadError) {
@@ -96,7 +112,7 @@ app.post("/chat", async (req, res) => {
       await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/messages`,
         { role: "user", content: message },
-        { headers }
+        { headers: getHeaders() }
       );
       console.log("✅ Mensaje enviado");
     } catch (messageError) {
@@ -111,7 +127,7 @@ app.post("/chat", async (req, res) => {
       runRes = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/runs`,
         { assistant_id: IA_ASSISTANT_ID },
-        { headers }
+        { headers: getHeaders() }
       );
       console.log("✅ Run iniciado, ID:", runRes.data.id);
     } catch (runError) {
@@ -127,7 +143,7 @@ app.post("/chat", async (req, res) => {
       try {
         const poll = await fetchWithRetry(
           `https://api.openai.com/v1/threads/${threadId}/runs/${runId}`,
-          { headers }
+          { headers: getHeaders() }
         );
         status = poll.data.status;
         console.log("🔄 Status del run:", status);
@@ -149,7 +165,7 @@ app.post("/chat", async (req, res) => {
     try {
       const msgRes = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/messages`,
-        { headers }
+        { headers: getHeaders() }
       );
 
       const lastMessage = msgRes.data.data.find((m) => m.role === "assistant");
@@ -181,7 +197,12 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV || "development",
     memory: process.memoryUsage(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    // Incluir información sobre las variables de entorno (sin mostrar valores sensibles)
+    config: {
+      IA_API_KEY: IA_API_KEY ? "Configurada" : "No configurada",
+      IA_ASSISTANT_ID: IA_ASSISTANT_ID ? "Configurado" : "No configurado"
+    }
   });
 });
 
