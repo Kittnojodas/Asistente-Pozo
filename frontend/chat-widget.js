@@ -129,8 +129,8 @@
         max-width: 75% !important;
         padding: 12px 16px !important;
         margin: 8px 0 !important;
-        border-radius: 12px !important;
-        font-size: 14px !important;
+        border-radius: 18px !important;
+        font-size: 15px !important;
         line-height: 1.5 !important;
         word-break: break-word !important;
         white-space: pre-wrap !important;
@@ -326,7 +326,7 @@
 
       input.value = "";
 
-    // Mostrar "Giorgia está escribiendo..." con animación
+      // Mostrar "Giorgia está escribiendo..." con animación
       const typingBubble = document.createElement("div");
       typingBubble.className = "chat-bubble typing";
       typingBubble.id = "typing-bubble";
