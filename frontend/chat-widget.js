@@ -197,47 +197,47 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      /* Animación de los tres puntitos - versión mejorada */
-      .typing-dots {
-        display: inline-block !important;
-        font-style: italic !important;
-        opacity: 0.6 !important;
-        color: var(--primary) !important;
-      }
-      
-      .typing-dots .dot {
-        display: inline-block !important;
-        width: 8px !important;
-        height: 8px !important;
-        border-radius: 50% !important;
-        background-color: var(--primary) !important;
-        margin: 0 2px !important;
+      /* Animación de los tres puntitos - versión corregida */
+    .typing-dots {
+      display: inline-block !important;
+      font-style: italic !important;
+      opacity: 0.6 !important;
+      color: var(--primary) !important;
+    }
+    
+    .typing-dots .dot {
+      display: inline-block !important;
+      width: 2px !important;
+      height: 2px !important;
+      border-radius: 50% !important;
+      background-color: var(--primary) !important;
+      margin: 0 1px !important;
+      vertical-align: middle !important;
+      animation: dotPulse 1.4s infinite ease-in-out !important;
+    }
+    
+    .typing-dots .dot:nth-child(1) {
+      animation-delay: 0s !important;
+    }
+    
+    .typing-dots .dot:nth-child(2) {
+      animation-delay: 0.2s !important;
+    }
+    
+    .typing-dots .dot:nth-child(3) {
+      animation-delay: 0.4s !important;
+    }
+    
+    @keyframes dotPulse {
+      0%, 60%, 100% {
+        transform: scale(0.8) !important;
         opacity: 0.3 !important;
-        animation: dotPulse 1.4s infinite ease-in-out !important;
       }
-      
-      .typing-dots .dot:nth-child(1) {
-        animation-delay: 0s !important;
+      30% {
+        transform: scale(1.2) !important;
+        opacity: 1 !important;
       }
-      
-      .typing-dots .dot:nth-child(2) {
-        animation-delay: 0.2s !important;
-      }
-      
-      .typing-dots .dot:nth-child(3) {
-        animation-delay: 0.4s !important;
-      }
-      
-      @keyframes dotPulse {
-        0%, 60%, 100% {
-          transform: translateY(0) !important;
-          opacity: 0.3 !important;
-        }
-        30% {
-          transform: translateY(-10px) !important;
-          opacity: 1 !important;
-        }
-      }
+    }
       
       /* Animación de entrada */
       @keyframes fadeInUp {
