@@ -12,35 +12,49 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 const PORT = process.env.PORT || 3001;
-const IA_API_KEY = process.env.IA_API_KEY;
-const IA_ASSISTANT_ID = process.env.IA_ASSISTANT_ID;
 
-// Verificar variables críticas al iniciar
-if (!IA_API_KEY || !IA_ASSISTANT_ID) {
-  console.error("❌ Faltan variables de entorno críticas:");
-  if (!IA_API_KEY) console.error("- IA_API_KEY no está definida");
-  if (!IA_ASSISTANT_ID) console.error("- IA_ASSISTANT_ID no está definido");
-  console.error("Por favor, configura estas variables en Render o en tu archivo .env");
-  process.exit(1);
+// Función para obtener variables de entorno con fallback
+function getEnvVar(key, defaultValue = null) {
+  const value = process.env[key];
+  if (!value && defaultValue === null) {
+    throw new Error(`Variable de entorno ${key} no está definida`);
+  }
+  return value || defaultValue;
 }
+
+// Obtener las variables de entorno
+const IA_API_KEY = getEnvVar('IA_API_KEY');
+const IA_ASSISTANT_ID = getEnvVar('IA_ASSISTANT_ID');
 
 // Función para obtener los headers de autenticación
 function getHeaders() {
-  // Verificar que la API key no esté vacía
-  if (!IA_API_KEY || IA_API_KEY.trim() === "") {
+  const apiKey = IA_API_KEY.trim();
+  
+  if (!apiKey || apiKey === "" || apiKey === "undefined") {
+    console.error("❌ API key inválida:", apiKey);
     throw new Error("La API key está vacía o no definida");
   }
   
-  return {
-    "Authorization": `Bearer ${IA_API_KEY.trim()}`,
+  const headers = {
+    "Authorization": `Bearer ${apiKey}`,
     "OpenAI-Beta": "assistants=v2",
     "Content-Type": "application/json"
   };
+  
+  console.log("🔑 Headers generados (Authorization oculta):", {
+    "Authorization": `Bearer ${apiKey.substring(0, 10)}...`,
+    "OpenAI-Beta": "assistants=v2",
+    "Content-Type": "application/json"
+  });
+  
+  return headers;
 }
 
 // Función con reintentos para manejar errores temporales
 async function fetchWithRetry(url, options, retries = 3) {
   try {
+    console.log("🔄 Haciendo petición a:", url);
+    console.log("🔄 Método:", options.method || 'GET');
     return await axios(url, options);
   } catch (err) {
     if (retries > 0) {
@@ -83,11 +97,14 @@ app.post("/chat", async (req, res) => {
     console.log("🧵 Thread ID:", threadId);
     
     // Verificar variables de entorno
-    if (!IA_API_KEY || !IA_ASSISTANT_ID) {
-      console.error("❌ Variables de entorno no configuradas");
+    try {
+      getEnvVar('IA_API_KEY');
+      getEnvVar('IA_ASSISTANT_ID');
+    } catch (envError) {
+      console.error("❌ Variables de entorno no configuradas:", envError.message);
       return res.status(500).json({ 
         error: "Configuración incompleta del servidor",
-        details: "Faltan IA_API_KEY o IA_ASSISTANT_ID"
+        details: envError.message
       });
     }
 
@@ -192,28 +209,49 @@ app.post("/chat", async (req, res) => {
 
 // Endpoint de health check para Render
 app.get("/health", (req, res) => {
-  res.status(200).json({ 
-    status: "OK", 
-    timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV || "development",
-    memory: process.memoryUsage(),
-    uptime: process.uptime(),
-    // Incluir información sobre las variables de entorno (sin mostrar valores sensibles)
-    config: {
-      IA_API_KEY: IA_API_KEY ? "Configurada" : "No configurada",
-      IA_ASSISTANT_ID: IA_ASSISTANT_ID ? "Configurado" : "No configurado"
-    }
+  try {
+    // Verificar que las variables de entorno estén configuradas
+    const apiKey = getEnvVar('IA_API_KEY', '');
+    const assistantId = getEnvVar('IA_ASSISTANT_ID', '');
+    
+    res.status(200).json({ 
+      status: "OK", 
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV || "development",
+      memory: process.memoryUsage(),
+      uptime: process.uptime(),
+      config: {
+        IA_API_KEY: apiKey ? "Configurada" : "No configurada",
+        IA_ASSISTANT_ID: assistantId ? "Configurado" : "No configurada"
+      },
+      // Mostrar los primeros caracteres de la API key para depuración
+      apiKeyPreview: apiKey ? apiKey.substring(0, 10) + "..." : "No configurada",
+      assistantIdPreview: assistantId ? assistantId.substring(0, 10) + "..." : "No configurada"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "ERROR",
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Endpoint para depuración de variables de entorno
+app.get("/debug-env", (req, res) => {
+  res.status(200).json({
+    allEnv: process.env,
+    iaApiKey: process.env.IA_API_KEY,
+    iaAssistantId: process.env.IA_ASSISTANT_ID,
+    nodeEnv: process.env.NODE_ENV
   });
 });
 
-// RUTAS AÑADIDAS PARA SOLUCIONAR ERRORES 404
-
-// Ruta para la página principal
+// Rutas para servir archivos estáticos
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/chat-widget.html"));
 });
 
-// Ruta para favicon.ico
 app.get("/favicon.ico", (req, res) => {
   res.status(204).end();
 });
@@ -223,5 +261,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Servidor Pozo corriendo en http://localhost:${PORT}`);
   console.log(`🌍 Entorno: ${process.env.NODE_ENV || "development"}`);
   console.log(`🔑 API Key: ${IA_API_KEY ? "Configurada" : "No configurada"}`);
+  console.log(`🔑 API Key (primeros 10 caracteres): ${IA_API_KEY ? IA_API_KEY.substring(0, 10) + "..." : "No configurada"}`);
   console.log(`🤖 Assistant ID: ${IA_ASSISTANT_ID ? "Configurado" : "No configurado"}`);
 });
