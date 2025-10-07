@@ -27,6 +27,7 @@ if (!IA_API_KEY || !IA_ASSISTANT_ID) {
 // Configuración para la API de IA
 const headers = {
   "Authorization": `Bearer ${IA_API_KEY}`,
+  "OpenAI-Beta": "assistants=v2",  // ¡Este header es crucial!
   "Content-Type": "application/json"
 };
 
