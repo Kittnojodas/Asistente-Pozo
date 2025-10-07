@@ -197,47 +197,26 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      /* Animación de los tres puntitos - versión corregida */
-    .typing-dots {
-      display: inline-block !important;
-      font-style: italic !important;
-      opacity: 0.6 !important;
-      color: var(--primary) !important;
-    }
-    
-    .typing-dots .dot {
-      display: inline-block !important;
-      width: 2px !important;
-      height: 2px !important;
-      border-radius: 50% !important;
-      background-color: var(--primary) !important;
-      margin: 0 1px !important;
-      vertical-align: middle !important;
-      animation: dotPulse 1.4s infinite ease-in-out !important;
-    }
-    
-    .typing-dots .dot:nth-child(1) {
-      animation-delay: 0s !important;
-    }
-    
-    .typing-dots .dot:nth-child(2) {
-      animation-delay: 0.2s !important;
-    }
-    
-    .typing-dots .dot:nth-child(3) {
-      animation-delay: 0.4s !important;
-    }
-    
-    @keyframes dotPulse {
-      0%, 60%, 100% {
-        transform: scale(0.8) !important;
-        opacity: 0.3 !important;
+      /* Animación de los tres puntitos - versión corregida según el modelo */
+      .chat-bubble.typing {
+        font-style: italic !important;
+        font-size: 13px !important;
+        color: #777 !important;
+        opacity: 0.8 !important;
+        position: relative !important;
       }
-      30% {
-        transform: scale(1.2) !important;
-        opacity: 1 !important;
+      
+      .chat-bubble.typing::after {
+        content: " ." !important;
+        animation: typingDots 1.2s steps(3, end) infinite !important;
       }
-    }
+      
+      @keyframes typingDots {
+        0% { content: " ." !important; }
+        33% { content: " .." !important; }
+        66% { content: " ..." !important; }
+        100% { content: " ." !important; }
+      }
       
       /* Animación de entrada */
       @keyframes fadeInUp {
@@ -342,11 +321,11 @@
 
       input.value = "";
 
-      // Mostrar "Giorgia está escribiendo..." con animación
+     // Mostrar "Giorgia está escribiendo..." con animación
       const typingBubble = document.createElement("div");
-      typingBubble.className = "chat-bubble assistant typing-dots";
+      typingBubble.className = "chat-bubble assistant typing";
       typingBubble.id = "typing-bubble";
-      typingBubble.innerHTML = "Giorgia está escribiendo<span class='dot'></span><span class='dot'></span><span class='dot'></span>";
+      typingBubble.innerHTML = "Giorgia está escribiendo";
       messagesDiv.appendChild(typingBubble);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
