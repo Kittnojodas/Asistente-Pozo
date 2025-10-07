@@ -14,12 +14,12 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 const PORT = process.env.PORT || 3001;
 
 // Función para obtener variables de entorno con fallback
-function getEnvVar(key, defaultValue = null) {
+function getEnvVar(key) {
   const value = process.env[key];
-  if (!value && defaultValue === null) {
+  if (!value) {
     throw new Error(`Variable de entorno ${key} no está definida`);
   }
-  return value || defaultValue;
+  return value;
 }
 
 // Obtener las variables de entorno
@@ -35,6 +35,7 @@ function getHeaders() {
     throw new Error("La API key está vacía o no definida");
   }
   
+  // Crear un objeto Headers manualmente para asegurar que se envíe correctamente
   const headers = {
     "Authorization": `Bearer ${apiKey}`,
     "OpenAI-Beta": "assistants=v2",
@@ -50,12 +51,31 @@ function getHeaders() {
   return headers;
 }
 
+// Función para hacer peticiones con axios asegurando que los headers se envíen correctamente
+async function makeRequest(url, options = {}) {
+  // Asegurarse de que options.headers exista
+  if (!options.headers) {
+    options.headers = {};
+  }
+  
+  // Fusionar los headers generados con los proporcionados
+  options.headers = { ...getHeaders(), ...options.headers };
+  
+  console.log(`🔄 Haciendo petición a: ${url}`);
+  console.log(`🔄 Método: ${options.method || 'GET'}`);
+  console.log(`🔄 Headers:`, {
+    "Authorization": `Bearer ${IA_API_KEY.substring(0, 10)}...`,
+    "OpenAI-Beta": options.headers["OpenAI-Beta"],
+    "Content-Type": options.headers["Content-Type"]
+  });
+  
+  return axios(url, options);
+}
+
 // Función con reintentos para manejar errores temporales
 async function fetchWithRetry(url, options, retries = 3) {
   try {
-    console.log("🔄 Haciendo petición a:", url);
-    console.log("🔄 Método:", options.method || 'GET');
-    return await axios(url, options);
+    return await makeRequest(url, options);
   } catch (err) {
     if (retries > 0) {
       console.log(`Reintentando... (${retries} intentos restantes)`);
@@ -73,7 +93,7 @@ async function esperarSinRunActivo(threadId) {
     try {
       const check = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/runs`,
-        { headers: getHeaders() }
+        { method: 'GET' }
       );
       activo = check.data.data.some(
         (r) => r.status === "in_progress" || r.status === "queued"
@@ -112,7 +132,10 @@ app.post("/chat", async (req, res) => {
     if (!threadId) {
       console.log("🆕 Creando nuevo thread");
       try {
-        const threadRes = await fetchWithRetry("https://api.openai.com/v1/threads", {}, { headers: getHeaders() });
+        const threadRes = await fetchWithRetry("https://api.openai.com/v1/threads", { 
+          method: 'POST',
+          data: {}
+        });
         threadId = threadRes.data.id;
         console.log("✅ Thread creado:", threadId);
       } catch (threadError) {
@@ -128,8 +151,10 @@ app.post("/chat", async (req, res) => {
     try {
       await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/messages`,
-        { role: "user", content: message },
-        { headers: getHeaders() }
+        { 
+          method: 'POST',
+          data: { role: "user", content: message }
+        }
       );
       console.log("✅ Mensaje enviado");
     } catch (messageError) {
@@ -143,8 +168,10 @@ app.post("/chat", async (req, res) => {
     try {
       runRes = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/runs`,
-        { assistant_id: IA_ASSISTANT_ID },
-        { headers: getHeaders() }
+        { 
+          method: 'POST',
+          data: { assistant_id: IA_ASSISTANT_ID }
+        }
       );
       console.log("✅ Run iniciado, ID:", runRes.data.id);
     } catch (runError) {
@@ -160,7 +187,7 @@ app.post("/chat", async (req, res) => {
       try {
         const poll = await fetchWithRetry(
           `https://api.openai.com/v1/threads/${threadId}/runs/${runId}`,
-          { headers: getHeaders() }
+          { method: 'GET' }
         );
         status = poll.data.status;
         console.log("🔄 Status del run:", status);
@@ -182,7 +209,7 @@ app.post("/chat", async (req, res) => {
     try {
       const msgRes = await fetchWithRetry(
         `https://api.openai.com/v1/threads/${threadId}/messages`,
-        { headers: getHeaders() }
+        { method: 'GET' }
       );
 
       const lastMessage = msgRes.data.data.find((m) => m.role === "assistant");
@@ -211,8 +238,8 @@ app.post("/chat", async (req, res) => {
 app.get("/health", (req, res) => {
   try {
     // Verificar que las variables de entorno estén configuradas
-    const apiKey = getEnvVar('IA_API_KEY', '');
-    const assistantId = getEnvVar('IA_ASSISTANT_ID', '');
+    const apiKey = IA_API_KEY;
+    const assistantId = IA_ASSISTANT_ID;
     
     res.status(200).json({ 
       status: "OK", 
@@ -262,5 +289,5 @@ app.listen(PORT, () => {
   console.log(`🌍 Entorno: ${process.env.NODE_ENV || "development"}`);
   console.log(`🔑 API Key: ${IA_API_KEY ? "Configurada" : "No configurada"}`);
   console.log(`🔑 API Key (primeros 10 caracteres): ${IA_API_KEY ? IA_API_KEY.substring(0, 10) + "..." : "No configurada"}`);
-  console.log(`🤖 Assistant ID: ${IA_ASSISTANT_ID ? "Configurado" : "No configurado"}`);
+  console.log(`🤖 Assistant ID: ${IA_ASSISTANT_ID ? "Configurado" : "No configurada"}`);
 });
