@@ -10,7 +10,7 @@
     fontLink.rel = "stylesheet";
     head.appendChild(fontLink);
 
-    // CSS del widget
+    // CSS del widget con mayor especificidad
     const widgetStyles = document.createElement("style");
     widgetStyles.textContent = `
       :root {
@@ -27,173 +27,173 @@
       
       /* Botón de volver */
       .back-button {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 10000;
-        background: var(--gradient);
-        color: white;
-        border: none;
-        border-radius: 50px;
-        padding: 12px 20px;
-        font-family: var(--font-family);
-        font-weight: 500;
-        font-size: 14px;
-        cursor: pointer;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 10000 !important;
+        background: var(--gradient) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
+        font-family: var(--font-family) !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s ease !important;
       }
       
       .back-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1) !important;
       }
       
       .back-button:active {
-        transform: translateY(0);
+        transform: translateY(0) !important;
       }
       
       /* Icono de flecha para el botón */
       .back-button::before {
-        content: '←';
-        font-size: 16px;
-        font-weight: bold;
+        content: '←' !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
       }
       
-      /* Widget de chat */
-      .chat-widget {
-        display: flex;
-        flex-direction: column;
-        width: 90%;
-        max-width: 500px;
-        position: fixed;
-        bottom: 20px;
-        left: 5%;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        overflow: hidden;
-        z-index: 9999;
-        animation: fadeInUp 0.4s ease-out;
-        border: 1px solid #e2e8f0;
+      /* Widget de chat con mayor especificidad */
+      body #chat-widget.chat-widget {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 90% !important;
+        max-width: 500px !important;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 5% !important;
+        background: white !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        overflow: hidden !important;
+        z-index: 9999 !important;
+        animation: fadeInUp 0.4s ease-out !important;
+        border: 1px solid #e2e8f0 !important;
       }
       
-      .chat-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 16px 20px;
-        background: var(--gradient);
-        color: white;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      body #chat-widget.chat-widget .chat-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 16px 20px !important;
+        background: var(--gradient) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       }
       
-      .chat-header img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      body #chat-widget.chat-widget .chat-header img {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      .chat-header-info {
-        flex-grow: 1;
+      body #chat-widget.chat-widget .chat-header-info {
+        flex-grow: 1 !important;
       }
       
-      .chat-header-info .name {
-        font-size: 16px;
-        font-weight: 600;
-        color: white;
+      body #chat-widget.chat-widget .chat-header-info .name {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: white !important;
       }
       
-      .chat-header-info .subtitle {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.8);
+      body #chat-widget.chat-widget .chat-header-info .subtitle {
+        font-size: 13px !important;
+        color: rgba(255, 255, 255, 0.8) !important;
       }
       
-      .chat-messages {
-        max-height: 400px;
-        overflow-y: auto;
-        flex-grow: 1;
-        margin: 0;
-        padding: 20px;
-        border-radius: 0;
-        -webkit-overflow-scrolling: touch;
-        background: #f8fafc;
+      body #chat-widget.chat-widget .chat-messages {
+        max-height: 400px !important;
+        overflow-y: auto !important;
+        flex-grow: 1 !important;
+        margin: 0 !important;
+        padding: 20px !important;
+        border-radius: 0 !important;
+        -webkit-overflow-scrolling: touch !important;
+        background: #f8fafc !important;
       }
       
-      .chat-bubble {
-        max-width: 75%;
-        padding: 12px 16px;
-        margin: 8px 0;
-        border-radius: 12px;
-        font-size: 14px;
-        line-height: 1.5;
-        word-break: break-word;
-        white-space: pre-wrap;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        font-family: var(--font-family);
+      body #chat-widget.chat-widget .chat-bubble {
+        max-width: 75% !important;
+        padding: 12px 16px !important;
+        margin: 8px 0 !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        word-break: break-word !important;
+        white-space: pre-wrap !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        font-family: var(--font-family) !important;
       }
       
-      .chat-bubble.user {
-        background: var(--user-bubble);
-        color: var(--dark);
-        align-self: flex-end;
-        margin-left: auto;
-        border-bottom-right-radius: 4px;
+      body #chat-widget.chat-widget .chat-bubble.user {
+        background: var(--user-bubble) !important;
+        color: var(--dark) !important;
+        align-self: flex-end !important;
+        margin-left: auto !important;
+        border-bottom-right-radius: 4px !important;
       }
       
-      .chat-bubble.assistant {
-        background: var(--assistant-bubble);
-        color: var(--dark);
-        align-self: flex-start;
-        margin-right: auto;
-        border-bottom-left-radius: 4px;
+      body #chat-widget.chat-widget .chat-bubble.assistant {
+        background: var(--assistant-bubble) !important;
+        color: var(--dark) !important;
+        align-self: flex-start !important;
+        margin-right: auto !important;
+        border-bottom-left-radius: 4px !important;
       }
       
-      .chat-input-container {
-        display: flex;
-        padding: 12px 16px;
-        border-top: 1px solid #e2e8f0;
-        background: white;
-        gap: 10px;
+      body #chat-widget.chat-widget .chat-input-container {
+        display: flex !important;
+        padding: 12px 16px !important;
+        border-top: 1px solid #e2e8f0 !important;
+        background: white !important;
+        gap: 10px !important;
       }
       
-      #user-input {
-        flex: 1;
-        padding: 10px 14px;
-        border-radius: 8px;
-        border: 1px solid #cbd5e0;
-        font-size: 14px;
-        font-family: var(--font-family);
-        background: white;
-        transition: border-color 0.2s;
+      body #chat-widget.chat-widget #user-input {
+        flex: 1 !important;
+        padding: 10px 14px !important;
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e0 !important;
+        font-size: 14px !important;
+        font-family: var(--font-family) !important;
+        background: white !important;
+        transition: border-color 0.2s !important;
       }
       
-      #user-input:focus {
-        border-color: var(--accent);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+      body #chat-widget.chat-widget #user-input:focus {
+        border-color: var(--accent) !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1) !important;
       }
       
-      .chat-widget button {
-        padding: 10px 16px;
-        background: var(--gradient);
-        color: white;
-        font-weight: 500;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: var(--font-family);
-        font-size: 14px;
+      body #chat-widget.chat-widget button {
+        padding: 10px 16px !important;
+        background: var(--gradient) !important;
+        color: white !important;
+        font-weight: 500 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        font-family: var(--font-family) !important;
+        font-size: 14px !important;
       }
       
-      .chat-widget button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      body #chat-widget.chat-widget button:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
       /* Animación de entrada */
@@ -210,24 +210,24 @@
       
       /* Responsive */
       @media screen and (max-width: 480px) {
-        .chat-widget {
-          width: 100%;
-          max-width: 100%;
-          bottom: 0;
-          left: 0;
-          border-radius: 16px 16px 0 0;
-          height: 80vh;
+        body #chat-widget.chat-widget {
+          width: 100% !important;
+          max-width: 100% !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          border-radius: 16px 16px 0 0 !important;
+          height: 80vh !important;
         }
         
-        .chat-messages {
-          max-height: calc(80vh - 120px);
+        body #chat-widget.chat-widget .chat-messages {
+          max-height: calc(80vh - 120px) !important;
         }
         
         .back-button {
-          top: 10px;
-          right: 10px;
-          padding: 10px 16px;
-          font-size: 12px;
+          top: 10px !important;
+          right: 10px !important;
+          padding: 10px 16px !important;
+          font-size: 12px !important;
         }
       }
     `;
@@ -290,7 +290,7 @@
 
       input.value = "";
 
-      // Mostrar "Pozo está escribiendo..."
+      // Mostrar "Giorgia está escribiendo..."
       const typingBubble = document.createElement("div");
       typingBubble.className = "chat-bubble assistant";
       typingBubble.id = "typing-bubble";
@@ -330,26 +330,21 @@
       }
     };
 
-    // Función para adjuntar los event listeners
+    // Función para adjuntar los event listeners con múltiples intentos
     function attachEventListeners() {
       const userInput = document.getElementById("user-input");
       const sendButton = document.getElementById("send-button");
       
       if (userInput && sendButton) {
+        // Remover listeners existentes para evitar duplicados
+        userInput.removeEventListener('keydown', handleEnterKey);
+        sendButton.removeEventListener('click', window.sendMessage);
+        
         // Event listener para la tecla Enter
-        userInput.addEventListener('keydown', function(event) {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            console.log("Tecla Enter presionada");
-            window.sendMessage();
-          }
-        });
+        userInput.addEventListener('keydown', handleEnterKey);
         
         // Event listener para el botón de enviar
-        sendButton.addEventListener('click', function() {
-          console.log("Botón Enviar clickeado");
-          window.sendMessage();
-        });
+        sendButton.addEventListener('click', window.sendMessage);
         
         console.log("✅ Event listeners adjuntados correctamente");
       } else {
@@ -357,11 +352,27 @@
         console.log("userInput:", userInput);
         console.log("sendButton:", sendButton);
         // Reintentar después de un corto tiempo
-        setTimeout(attachEventListeners, 100);
+        setTimeout(attachEventListeners, 200);
       }
     }
 
-    // Adjuntar los event listeners
-    setTimeout(attachEventListeners, 100);
+    // Función que maneja la tecla Enter
+    function handleEnterKey(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        console.log("🔑 Tecla Enter presionada");
+        window.sendMessage();
+      }
+    }
+
+    // Adjuntar los event listeners con múltiples reintentos
+    function attachWithRetry() {
+      attachEventListeners();
+      setTimeout(attachEventListeners, 500);
+      setTimeout(attachEventListeners, 1000);
+    }
+
+    // Iniciar el proceso de adjuntar listeners
+    attachWithRetry();
   });
 })();
