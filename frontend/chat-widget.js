@@ -197,13 +197,18 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      /* Animación de los tres puntitos - versión corregida según el modelo */
+      /* Animación de los tres puntitos - idéntica al modelo */
       .chat-bubble.typing {
         font-style: italic !important;
         font-size: 13px !important;
         color: #777 !important;
         opacity: 0.8 !important;
         position: relative !important;
+        background: var(--assistant-bubble) !important;
+        color: var(--primary) !important;
+        align-self: flex-start !important;
+        margin-right: auto !important;
+        border-bottom-left-radius: 4px !important;
       }
       
       .chat-bubble.typing::after {
@@ -321,9 +326,9 @@
 
       input.value = "";
 
-     // Mostrar "Giorgia está escribiendo..." con animación
+    // Mostrar "Giorgia está escribiendo..." con animación
       const typingBubble = document.createElement("div");
-      typingBubble.className = "chat-bubble assistant typing";
+      typingBubble.className = "chat-bubble typing";
       typingBubble.id = "typing-bubble";
       typingBubble.innerHTML = "Giorgia está escribiendo";
       messagesDiv.appendChild(typingBubble);
