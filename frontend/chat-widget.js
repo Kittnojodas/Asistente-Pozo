@@ -63,7 +63,7 @@
         font-weight: bold !important;
       }
       
-      /* Widget de chat con mayor especificidad */
+      /* Widget de chat centrado en desktop */
       body #chat-widget.chat-widget {
         display: flex !important;
         flex-direction: column !important;
@@ -71,7 +71,8 @@
         max-width: 500px !important;
         position: fixed !important;
         bottom: 20px !important;
-        left: 5% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
         background: white !important;
         border-radius: 16px !important;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
@@ -196,6 +197,34 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
+      /* Animación de los tres puntitos */
+      .typing-dots {
+        display: inline-block !important;
+        font-style: italic !important;
+        opacity: 0.7 !important;
+        color: var(--primary) !important;
+      }
+      
+      .typing-dots::after {
+        content: '' !important;
+        animation: dots 1.5s steps(4, end) infinite !important;
+      }
+      
+      @keyframes dots {
+        0%, 20% {
+          content: '' !important;
+        }
+        40% {
+          content: '.' !important;
+        }
+        60% {
+          content: '..' !important;
+        }
+        80%, 100% {
+          content: '...' !important;
+        }
+      }
+      
       /* Animación de entrada */
       @keyframes fadeInUp {
         from {
@@ -217,6 +246,7 @@
           left: 0 !important;
           border-radius: 16px 16px 0 0 !important;
           height: 80vh !important;
+          transform: none !important;
         }
         
         body #chat-widget.chat-widget .chat-messages {
@@ -228,6 +258,14 @@
           right: 10px !important;
           padding: 10px 16px !important;
           font-size: 12px !important;
+        }
+      }
+      
+      /* Desktop - mantener centrado */
+      @media screen and (min-width: 481px) {
+        body #chat-widget.chat-widget {
+          left: 50% !important;
+          transform: translateX(-50%) !important;
         }
       }
     `;
@@ -290,11 +328,11 @@
 
       input.value = "";
 
-      // Mostrar "Giorgia está escribiendo..."
+      // Mostrar "Giorgia está escribiendo..." con animación
       const typingBubble = document.createElement("div");
-      typingBubble.className = "chat-bubble assistant";
+      typingBubble.className = "chat-bubble assistant typing-dots";
       typingBubble.id = "typing-bubble";
-      typingBubble.innerHTML = "Giorgia está escribiendo...";
+      typingBubble.innerHTML = "Giorgia está escribiendo";
       messagesDiv.appendChild(typingBubble);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
