@@ -197,30 +197,17 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      /* Animación de los tres puntitos - idéntica al modelo */
+      /* Animación de los tres puntitos - versión JavaScript */
       .chat-bubble.typing {
         font-style: italic !important;
         font-size: 13px !important;
         color: #777 !important;
         opacity: 0.8 !important;
-        position: relative !important;
         background: var(--assistant-bubble) !important;
         color: var(--primary) !important;
         align-self: flex-start !important;
         margin-right: auto !important;
         border-bottom-left-radius: 4px !important;
-      }
-      
-      .chat-bubble.typing::after {
-        content: " ." !important;
-        animation: typingDots 1.2s steps(3, end) infinite !important;
-      }
-      
-      @keyframes typingDots {
-        0% { content: " ." !important; }
-        33% { content: " .." !important; }
-        66% { content: " ..." !important; }
-        100% { content: " ." !important; }
       }
       
       /* Animación de entrada */
@@ -330,9 +317,19 @@
       const typingBubble = document.createElement("div");
       typingBubble.className = "chat-bubble typing";
       typingBubble.id = "typing-bubble";
-      typingBubble.innerHTML = "Giorgia está escribiendo";
+      typingBubble.innerHTML = "Giorgia está escribiendo<span id='typing-dots'></span>";
       messagesDiv.appendChild(typingBubble);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      // Animación de los puntos con JavaScript
+      let dotsCount = 0;
+      const typingInterval = setInterval(() => {
+        dotsCount = (dotsCount + 1) % 4;
+        const dotsElement = document.getElementById('typing-dots');
+        if (dotsElement) {
+          dotsElement.textContent = '.'.repeat(dotsCount);
+        }
+      }, 400);
 
       try {
         const res = await fetch("/chat", {
@@ -348,7 +345,8 @@
           localStorage.setItem("thread_id", threadId);
         }
 
-        // Eliminar "escribiendo..." bubble
+        // Detener la animación y eliminar "escribiendo..." bubble
+        clearInterval(typingInterval);
         const typing = document.getElementById("typing-bubble");
         if (typing) typing.remove();
 
@@ -358,6 +356,11 @@
         messagesDiv.appendChild(assistantBubble);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
+        // Detener la animación y eliminar "escribiendo..." bubble
+        clearInterval(typingInterval);
+        const typing = document.getElementById("typing-bubble");
+        if (typing) typing.remove();
+        
         const errorBubble = document.createElement("div");
         errorBubble.className = "chat-bubble assistant";
         errorBubble.innerHTML = "Lo siento, ocurrió un error.";
