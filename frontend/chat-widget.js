@@ -70,7 +70,7 @@
         width: 90% !important;
         max-width: 500px !important;
         position: fixed !important;
-        bottom: 20px !important;
+        top: 20px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         background: white !important;
@@ -93,8 +93,8 @@
       }
       
       body #chat-widget.chat-widget .chat-header img {
-        width: 40px !important;
-        height: 40px !important;
+        width: 50px !important;
+        height: 50px !important;
         border-radius: 50% !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
@@ -201,7 +201,7 @@
       .typing-dots {
         display: inline-block !important;
         font-style: italic !important;
-        opacity: 0.7 !important;
+        opacity: 0.6 !important;
         color: var(--primary) !important;
       }
       
@@ -240,10 +240,10 @@
       /* Responsive */
       @media screen and (max-width: 480px) {
         body #chat-widget.chat-widget {
-          width: 100% !important;
-          max-width: 100% !important;
-          bottom: 0 !important;
-          left: 0 !important;
+          width: 95% !important;
+          max-width: 95% !important;
+          bottom: 2px !important;
+          left: 1px !important;
           border-radius: 16px 16px 0 0 !important;
           height: 80vh !important;
           transform: none !important;
@@ -293,7 +293,7 @@
           <img src="/images/giorgia.png" alt="Pozo" />
           <div class="chat-header-info">
             <div class="name">Asistente Giorgia</div>
-            <div class="subtitle">Tu experto inmobiliario</div>
+            <div class="subtitle">Tu experto en Inversiones</div>
           </div>
         </div>
         <div id="messages" class="chat-messages">
@@ -332,7 +332,7 @@
       const typingBubble = document.createElement("div");
       typingBubble.className = "chat-bubble assistant typing-dots";
       typingBubble.id = "typing-bubble";
-      typingBubble.innerHTML = "Giorgia está escribiendo";
+      typingBubble.innerHTML = "Giorgia está escribiendo...";
       messagesDiv.appendChild(typingBubble);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
