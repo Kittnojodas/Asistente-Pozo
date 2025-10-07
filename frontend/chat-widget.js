@@ -4,9 +4,9 @@
     const head = document.head;
     const body = document.body;
 
-    // Cargar fuente Inter
+    // Cargar fuentes Barbold y Montserrat
     const fontLink = document.createElement("link");
-    fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap";
+    fontLink.href = "https://fonts.googleapis.com/css2?family=Barlow:wght@700&family=Montserrat:wght@400&display=swap";
     fontLink.rel = "stylesheet";
     head.appendChild(fontLink);
 
@@ -19,10 +19,11 @@
         --accent: #3182ce;
         --light: #ebf8ff;
         --dark: #1a202c;
-        --assistant-bubble: #f7fafc;
+        --assistant-bubble: #eef2f7; /* Color ligeramente modificado */
         --user-bubble: #e6fffa;
         --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-        --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        --font-header: 'Barlow', sans-serif;
+        --font-messages: 'Montserrat', sans-serif;
       }
       
       /* Botón de volver */
@@ -36,7 +37,7 @@
         border: none !important;
         border-radius: 50px !important;
         padding: 12px 20px !important;
-        font-family: var(--font-family) !important;
+        font-family: var(--font-messages) !important;
         font-weight: 500 !important;
         font-size: 14px !important;
         cursor: pointer !important;
@@ -104,14 +105,18 @@
       }
       
       body #chat-widget.chat-widget .chat-header-info .name {
-        font-size: 16px !important;
-        font-weight: 600 !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        font-family: var(--font-header) !important;
         color: white !important;
+        letter-spacing: 0.5px !important;
       }
       
       body #chat-widget.chat-widget .chat-header-info .subtitle {
-        font-size: 13px !important;
+        font-size: 14px !important;
+        font-family: var(--font-header) !important;
         color: rgba(255, 255, 255, 0.8) !important;
+        margin-top: 2px !important;
       }
       
       body #chat-widget.chat-widget .chat-messages {
@@ -135,7 +140,7 @@
         word-break: break-word !important;
         white-space: pre-wrap !important;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-        font-family: var(--font-family) !important;
+        font-family: var(--font-messages) !important;
       }
       
       body #chat-widget.chat-widget .chat-bubble.user {
@@ -168,7 +173,7 @@
         border-radius: 8px !important;
         border: 1px solid #cbd5e0 !important;
         font-size: 14px !important;
-        font-family: var(--font-family) !important;
+        font-family: var(--font-messages) !important;
         background: white !important;
         transition: border-color 0.2s !important;
       }
@@ -188,7 +193,7 @@
         border-radius: 8px !important;
         cursor: pointer !important;
         transition: all 0.2s !important;
-        font-family: var(--font-family) !important;
+        font-family: var(--font-messages) !important;
         font-size: 14px !important;
       }
       
@@ -208,6 +213,7 @@
         align-self: flex-start !important;
         margin-right: auto !important;
         border-bottom-left-radius: 4px !important;
+        font-family: var(--font-messages) !important;
       }
       
       /* Animación de entrada */
