@@ -197,7 +197,7 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
       }
       
-      /* Animación de los tres puntitos */
+      /* Animación de los tres puntitos - versión mejorada */
       .typing-dots {
         display: inline-block !important;
         font-style: italic !important;
@@ -205,23 +205,37 @@
         color: var(--primary) !important;
       }
       
-      .typing-dots::after {
-        content: '' !important;
-        animation: dots 1.5s steps(4, end) infinite !important;
+      .typing-dots .dot {
+        display: inline-block !important;
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        background-color: var(--primary) !important;
+        margin: 0 2px !important;
+        opacity: 0.3 !important;
+        animation: dotPulse 1.4s infinite ease-in-out !important;
       }
       
-      @keyframes dots {
-        0%, 20% {
-          content: '' !important;
+      .typing-dots .dot:nth-child(1) {
+        animation-delay: 0s !important;
+      }
+      
+      .typing-dots .dot:nth-child(2) {
+        animation-delay: 0.2s !important;
+      }
+      
+      .typing-dots .dot:nth-child(3) {
+        animation-delay: 0.4s !important;
+      }
+      
+      @keyframes dotPulse {
+        0%, 60%, 100% {
+          transform: translateY(0) !important;
+          opacity: 0.3 !important;
         }
-        40% {
-          content: '.' !important;
-        }
-        60% {
-          content: '..' !important;
-        }
-        80%, 100% {
-          content: '...' !important;
+        30% {
+          transform: translateY(-10px) !important;
+          opacity: 1 !important;
         }
       }
       
@@ -332,7 +346,7 @@
       const typingBubble = document.createElement("div");
       typingBubble.className = "chat-bubble assistant typing-dots";
       typingBubble.id = "typing-bubble";
-      typingBubble.innerHTML = "Giorgia está escribiendo...";
+      typingBubble.innerHTML = "Giorgia está escribiendo<span class='dot'></span><span class='dot'></span><span class='dot'></span>";
       messagesDiv.appendChild(typingBubble);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
