@@ -2,21 +2,28 @@
   const head = document.head;
   const body = document.body;
 
+  // Cargar fuente Inter
+  const fontLink = document.createElement("link");
+  fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap";
+  fontLink.rel = "stylesheet";
+  head.appendChild(fontLink);
+
   // CSS del widget
   const widgetStyles = document.createElement("style");
   widgetStyles.textContent = `
-   :root {
-    --primary: #1e3a5f;
-    --secondary: #2c5282;
-    --accent: #3182ce;
-    --light: #ebf8ff;
-    --dark: #1a202c;
-    --assistant-bubble: #f7fafc;
-    --user-bubble: #e6fffa;
-    --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-    --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  }
-   /* Botón de volver */
+    :root {
+      --primary: #1e3a5f;
+      --secondary: #2c5282;
+      --accent: #3182ce;
+      --light: #ebf8ff;
+      --dark: #1a202c;
+      --assistant-bubble: #f7fafc;
+      --user-bubble: #e6fffa;
+      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+      --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+    
+    /* Botón de volver */
     .back-button {
       position: fixed;
       top: 20px;
@@ -52,23 +59,9 @@
       content: '←';
       font-size: 16px;
       font-weight: bold;
-    } 
-
-
-    .chat-widget,
-    .chat-header,
-    .chat-messages,
-    .chat-input-container,
-    .chat-bubble,
-    #chat-bubble-hint {
-      font-family: 'Poppins', 'Noto Color Emoji', sans-serif;
     }
     
-    #chat-bubble-hint {
-      font-style: normal;
-      font-weight: normal;
-    }
-    
+    /* Widget de chat */
     .chat-widget {
       display: flex;
       flex-direction: column;
@@ -77,63 +70,210 @@
       position: fixed;
       bottom: 20px;
       left: 5%;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       overflow: hidden;
       z-index: 9999;
       animation: fadeInUp 0.4s ease-out;
+      border: 1px solid #e2e8f0;
     }
     
-    /* ... (resto de estilos CSS que tenías) ... */
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--gradient);
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-header-info {
+      flex-grow: 1;
+    }
+    
+    .chat-header-info .name {
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .chat-header-info .subtitle {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .chat-messages {
+      max-height: 400px;
+      overflow-y: auto;
+      flex-grow: 1;
+      margin: 0;
+      padding: 20px;
+      border-radius: 0;
+      -webkit-overflow-scrolling: touch;
+      background: #f8fafc;
+    }
+    
+    .chat-bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+      white-space: pre-wrap;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      font-family: var(--font-family);
+    }
+    
+    .chat-bubble.user {
+      background: var(--user-bubble);
+      color: var(--dark);
+      align-self: flex-end;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .chat-bubble.assistant {
+      background: var(--assistant-bubble);
+      color: var(--dark);
+      align-self: flex-start;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      padding: 12px 16px;
+      border-top: 1px solid #e2e8f0;
+      background: white;
+      gap: 10px;
+    }
+    
+    #user-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e0;
+      font-size: 14px;
+      font-family: var(--font-family);
+      background: white;
+      transition: border-color 0.2s;
+    }
+    
+    #user-input:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+    }
+    
+    .chat-widget button {
+      padding: 10px 16px;
+      background: var(--gradient);
+      color: white;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-family);
+      font-size: 14px;
+    }
+    
+    .chat-widget button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Animación de entrada */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Responsive */
+    @media screen and (max-width: 480px) {
+      .chat-widget {
+        width: 100%;
+        max-width: 100%;
+        bottom: 0;
+        left: 0;
+        border-radius: 16px 16px 0 0;
+        height: 80vh;
+      }
+      
+      .chat-messages {
+        max-height: calc(80vh - 120px);
+      }
+      
+      .back-button {
+        top: 10px;
+        right: 10px;
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+    }
   `;
   head.appendChild(widgetStyles);
 
-  let chatOpenedManually = false;
   let threadId = localStorage.getItem("thread_id") || null;
-
-  // HTML del widget
-  const widgetHTML = `
-    <div id="chat-widget" class="chat-widget" style="display:none">
-      <div class="chat-header">
-        <img src="/images/giorgia.png" alt="Pozo" style="width: 50px; height: 50px; border-radius: 50%;" />
-        <span id="chat-header-text">Hola, soy Giorgia. Pregúntame lo que quieras</span>
-        
-      </div>
-      <div id="messages" class="chat-messages"></div>
-      <div class="chat-input-container">
-        <input type="text" id="user-input" placeholder="Escribe tu mensaje..." />
-        <button onclick="sendMessage()">Enviar</button>
-      </div>
-    </div>
-   
-  `;
-  
-head.appendChild(widgetStyles);
 
   // Crear botón de volver
   const backButton = document.createElement("button");
   backButton.className = "back-button";
   backButton.innerHTML = "Volver";
   backButton.onclick = function() {
-    // Volver a la página anterior
     if (window.history.length > 1) {
       window.history.back();
     } else {
-      // Si no hay historial, ir al home
       window.location.href = "/";
     }
   };
   body.appendChild(backButton);
 
-
+  // HTML del widget (siempre visible)
+  const widgetHTML = `
+    <div id="chat-widget" class="chat-widget">
+      <div class="chat-header">
+        <img src="/images/giorgia.png" alt="Pozo" />
+        <div class="chat-header-info">
+          <div class="name">Asistente Pozo</div>
+          <div class="subtitle">Tu experto inmobiliario</div>
+        </div>
+      </div>
+      <div id="messages" class="chat-messages">
+        <div class="chat-bubble assistant">
+          ¡Hola! Soy Pozo, tu asistente inmobiliario. ¿En qué puedo ayudarte hoy?
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="user-input" placeholder="Escribe tu mensaje..." />
+        <button id="send-button">Enviar</button>
+      </div>
+    </div>
+  `;
+  
   const wrapper = document.createElement("div");
   wrapper.innerHTML = widgetHTML;
   body.appendChild(wrapper);
 
-
-
-  window.sendMessage = async function () {
+  // Definir la función sendMessage
+  window.sendMessage = async function() {
     const input = document.getElementById("user-input");
     const message = input.value.trim();
     if (!message) return;
@@ -148,11 +288,11 @@ head.appendChild(widgetStyles);
 
     input.value = "";
 
-    // Mostrar "Giorgia está escribiendo..."
+    // Mostrar "Pozo está escribiendo..."
     const typingBubble = document.createElement("div");
     typingBubble.className = "chat-bubble assistant";
     typingBubble.id = "typing-bubble";
-    typingBubble.innerHTML = "Giorgia está escribiendo";
+    typingBubble.innerHTML = "Pozo está escribiendo...";
     messagesDiv.appendChild(typingBubble);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -188,5 +328,31 @@ head.appendChild(widgetStyles);
     }
   };
 
-  
+  // Función para adjuntar el event listener del input
+  function attachInputListener() {
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
+    
+    if (userInput && sendButton) {
+      // Event listener para la tecla Enter
+      userInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          window.sendMessage();
+        }
+      });
+      
+      // Event listener para el botón de enviar
+      sendButton.addEventListener('click', window.sendMessage);
+      
+      console.log("✅ Event listeners adjuntados correctamente");
+    } else {
+      console.error("❌ No se encontraron los elementos del chat");
+      // Reintentar después de un corto tiempo
+      setTimeout(attachInputListener, 100);
+    }
+  }
+
+  // Adjuntar los event listeners
+  attachInputListener();
 })();
