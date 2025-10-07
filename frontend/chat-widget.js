@@ -5,12 +5,17 @@
   // CSS del widget
   const widgetStyles = document.createElement("style");
   widgetStyles.textContent = `
-    :root {
-      --primary: #4b136b;
-      --gradient: linear-gradient(135deg, #b13d84, #4b136b);
-      --assistant-bubble: #e9d3f5;
-      --user-bubble: #d3c7ff;
-    }
+   :root {
+    --primary: #1e3a5f;
+    --secondary: #2c5282;
+    --accent: #3182ce;
+    --light: #ebf8ff;
+    --dark: #1a202c;
+    --assistant-bubble: #f7fafc;
+    --user-bubble: #e6fffa;
+    --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+    --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
     
     .chat-widget,
     .chat-header,
