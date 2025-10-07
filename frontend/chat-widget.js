@@ -54,8 +54,8 @@
     <div id="chat-widget" class="chat-widget" style="display:none">
       <div class="chat-header">
         <img src="/images/giorgia.png" alt="Pozo" style="width: 50px; height: 50px; border-radius: 50%;" />
-        <span id="chat-header-text">Hola, soy Pozo. Pregúntame lo que quieras</span>
-        <button onclick="toggleChat()">×</button>
+        <span id="chat-header-text">Hola, soy Giorgia. Pregúntame lo que quieras</span>
+        
       </div>
       <div id="messages" class="chat-messages"></div>
       <div class="chat-input-container">
@@ -72,21 +72,7 @@
   wrapper.innerHTML = widgetHTML;
   body.appendChild(wrapper);
 
-  window.toggleChat = function () {
-    const widget = document.getElementById("chat-widget");
-    const toggleBtn = document.getElementById("chat-toggle-button");
-    if (widget.style.display === "none") {
-      widget.style.display = "block";
-      toggleBtn.style.opacity = "0";
-      toggleBtn.style.pointerEvents = "none";
-      document.getElementById("user-input").focus();
-      chatOpenedManually = true;
-    } else {
-      widget.style.display = "none";
-      toggleBtn.style.opacity = "1";
-      toggleBtn.style.pointerEvents = "auto";
-    }
-  };
+
 
   window.sendMessage = async function () {
     const input = document.getElementById("user-input");
