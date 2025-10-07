@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="chat-widget.css">
 </head>
 <body>
+ <!-- Botón de volver -->
+  <button class="back-button" onclick="goBack()">← Volver</button>
+
   <div id="chat-widget" class="chat-widget">
     <div class="chat-header">
       <img src="/images/giorgia.png" alt="Pozo" style="width: 50px; height: 50px; border-radius: 50%;" />
@@ -25,5 +28,14 @@
   </button>
   
   <script src="chat-widget.js"></script>
+  <script>
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+  </script>
 </body>
 </html>
