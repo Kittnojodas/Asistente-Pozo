@@ -89,11 +89,11 @@
 
     input.value = "";
 
-    // Mostrar "Pozo está escribiendo..."
+    // Mostrar "Giorgia está escribiendo..."
     const typingBubble = document.createElement("div");
     typingBubble.className = "chat-bubble assistant";
     typingBubble.id = "typing-bubble";
-    typingBubble.innerHTML = "Pozo está escribiendo";
+    typingBubble.innerHTML = "Giorgia está escribiendo";
     messagesDiv.appendChild(typingBubble);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
