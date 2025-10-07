@@ -124,6 +124,18 @@ app.get("/health", (req, res) => {
   });
 });
 
+// RUTAS AÑADIDAS PARA SOLUCIONAR ERRORES 404
+
+// Ruta para la página principal
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/chat-widget.html"));
+});
+
+// Ruta para favicon.ico
+app.get("/favicon.ico", (req, res) => {
+  res.status(204).end();
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor Pozo corriendo en http://localhost:${PORT}`);
