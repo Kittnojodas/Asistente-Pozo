@@ -284,7 +284,7 @@
           <img src="/images/giorgia.png" alt="Pozo" />
           <div class="chat-header-info">
             <div class="name">Asistente Giorgia</div>
-            <div class="subtitle">Tu experto en Inversiones</div>
+            <div class="subtitle">Experta en Inversiones</div>
           </div>
         </div>
         <div id="messages" class="chat-messages">
