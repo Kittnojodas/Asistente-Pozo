@@ -10,33 +10,6 @@
     fontLink.rel = "stylesheet";
     head.appendChild(fontLink);
 
-    // Agregar favicon con la ruta correcta al directorio Frontend
-    const favicon = document.createElement("link");
-    favicon.rel = "icon";
-    favicon.type = "image/x-icon";
-    favicon.href = "/Frontend/favicon.ico"; // Ruta corregida al directorio Frontend
-    head.appendChild(favicon);
-
-    // Agregar favicon en formato PNG para mejor compatibilidad
-    const faviconPng = document.createElement("link");
-    faviconPng.rel = "icon";
-    faviconPng.type = "image/png";
-    faviconPng.href = "/Frontend/favicon.png"; // Si tienes una versión PNG
-    head.appendChild(faviconPng);
-
-    // Agregar favicon para dispositivos Apple
-    const appleIcon = document.createElement("link");
-    appleIcon.rel = "apple-touch-icon";
-    appleIcon.href = "/Frontend/apple-touch-icon.png"; // Si tienes una versión para Apple
-    head.appendChild(appleIcon);
-
-    // Agregar favicon en formato SVG para navegadores modernos
-    const faviconSvg = document.createElement("link");
-    faviconSvg.rel = "icon";
-    faviconSvg.type = "image/svg+xml";
-    faviconSvg.href = "/Frontend/favicon.svg"; // Si tienes una versión SVG
-    head.appendChild(faviconSvg);
-
     // CSS del widget con mayor especificidad
     const widgetStyles = document.createElement("style");
     widgetStyles.textContent = `
@@ -308,10 +281,10 @@
     const widgetHTML = `
       <div id="chat-widget" class="chat-widget">
         <div class="chat-header">
-          <img src="/Frontend/images/giorgia.png" alt="Pozo" />
+          <img src="/images/giorgia.png" alt="Pozo" />
           <div class="chat-header-info">
             <div class="name">Asistente Giorgia</div>
-            <div class="subtitle">Tu experto en Inversiones</div>
+            <div class="subtitle">Experta en Inversiones</div>
           </div>
         </div>
         <div id="messages" class="chat-messages">
