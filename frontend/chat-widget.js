@@ -16,7 +16,45 @@
     --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   }
+   /* Botón de volver */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-family: var(--font-family);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
     
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+    }
+    
+    /* Icono de flecha para el botón */
+    .back-button::before {
+      content: '←';
+      font-size: 16px;
+      font-weight: bold;
+    } 
+
+
     .chat-widget,
     .chat-header,
     .chat-messages,
@@ -73,6 +111,24 @@
     </button>
   `;
   
+head.appendChild(widgetStyles);
+
+  // Crear botón de volver
+  const backButton = document.createElement("button");
+  backButton.className = "back-button";
+  backButton.innerHTML = "Volver";
+  backButton.onclick = function() {
+    // Volver a la página anterior
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      // Si no hay historial, ir al home
+      window.location.href = "/";
+    }
+  };
+  body.appendChild(backButton);
+
+
   const wrapper = document.createElement("div");
   wrapper.innerHTML = widgetHTML;
   body.appendChild(wrapper);
