@@ -106,9 +106,7 @@
         <button onclick="sendMessage()">Enviar</button>
       </div>
     </div>
-    <button id="chat-toggle-button">
-      <img src="/images/logo.png" alt="Chat" />
-    </button>
+   
   `;
   
 head.appendChild(widgetStyles);
@@ -190,10 +188,5 @@ head.appendChild(widgetStyles);
     }
   };
 
-  document.getElementById("chat-toggle-button").addEventListener("click", window.toggleChat);
-  document.getElementById("user-input").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      window.sendMessage();
-    }
-  });
+  
 })();
